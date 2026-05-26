@@ -3,25 +3,26 @@
 #include "platform.h"
 #include <ModbusMaster.h>
 
+
 static ModbusMaster g_node;
 
 /* MAX485 half-duplex 방향 전환 콜백 */
 static void pre_tx(void)  { digitalWrite(THRUSTER_RS485_DE_PIN, HIGH); }
 static void post_tx(void) { digitalWrite(THRUSTER_RS485_DE_PIN, LOW);  }
 
-// Serial2 + MAX485 초기화
+// Serial3 + MAX485 초기화
 void thruster_init(void)
 {
     pinMode(THRUSTER_RS485_DE_PIN, OUTPUT);
     digitalWrite(THRUSTER_RS485_DE_PIN, LOW);  /* 초기 수신 모드 */
 
-    /* UART2 핀(RX2/TX2)으로 RS-485 모듈 연결 */
-    Serial2.begin(THRUSTER_BAUD);
-    g_node.begin(THRUSTER_MODBUS_SLAVE_ID, Serial2);
+    /* UART3 핀(RX3/TX3)으로 RS-485 모듈 연결 */
+    Serial3.begin(THRUSTER_BAUD);
+    g_node.begin(THRUSTER_MODBUS_SLAVE_ID, Serial3);
     g_node.preTransmission(pre_tx);
     g_node.postTransmission(post_tx);
 
-    platform_log("[THRUSTER] init OK (UART2, slave=%u)\n", THRUSTER_MODBUS_SLAVE_ID);
+    platform_log("[THRUSTER] init OK (UART3, slave=%u)\n", THRUSTER_MODBUS_SLAVE_ID);
 }
 
 //  6바이트 payload → ThrusterCmd 파싱 + 범위 검증 (추력기 6개 동시)

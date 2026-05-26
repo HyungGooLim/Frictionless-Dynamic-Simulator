@@ -7,6 +7,9 @@
 
 #include <Arduino.h>
 #include <stdarg.h>
+#ifdef __AVR__
+#include <avr/wdt.h>
+#endif
 
 static uint32_t g_baudrate = 9600;
 
@@ -64,6 +67,18 @@ void platform_log(const char* fmt, ...)
     Serial.print(tmp);
 }
 
+void platform_reset(void)
+{
+#ifdef __AVR__
+    wdt_enable(WDTO_15MS);
+    while (1) {}
+#elif defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_ESP8266)
+    ESP.restart();
+#else
+    NVIC_SystemReset();
+#endif
+}
+
 /* ================================================================ */
 #elif defined(PLATFORM_WSL)
 /* ================================================================ */
@@ -95,6 +110,7 @@ bool platform_uart_init(uint32_t baudrate)
 
 int platform_uart_available(void)                        { return 0; }
 int platform_uart_read(uint8_t* buf, size_t maxlen)      { (void)buf; (void)maxlen; return 0; }
+void platform_reset(void)                                { exit(0); }
 
 int platform_uart_write(const uint8_t* buf, size_t len)
 {

@@ -19,6 +19,7 @@ int      platform_uart_read(uint8_t* buf, size_t maxlen);
 int      platform_uart_write(const uint8_t* buf, size_t len);
 
 void     platform_log(const char* fmt, ...);
+void     platform_reset(void);
 
 #ifdef __cplusplus
 }

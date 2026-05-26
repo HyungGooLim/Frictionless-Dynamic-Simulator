@@ -1,5 +1,5 @@
-#ifndef TC_HANDLER_H
-#define TC_HANDLER_H
+#ifndef TC_TX_HANDLER_H
+#define TC_TX_HANDLER_H
 
 #include <stdint.h>
 #include <stddef.h>
@@ -36,7 +36,6 @@ typedef struct Telecmd_TxContext {
 extern "C" {
 #endif
 
-// 
 void tc_tx_init(Telecmd_TxContext* c, uint32_t timeout_ms, uint8_t max_retry);
 void tc_tx_reset(Telecmd_TxContext* c);
 
@@ -66,4 +65,4 @@ void tc_tx_run(Telecmd_TxContext* c);
 }
 #endif
 
-#endif  /* TC_HANDLER_H */
+#endif  /* TC_TX_HANDLER_H */
